@@ -1,7 +1,12 @@
-// ===== ARQUIVO DO POKER - DADOS E FUNÇÕES =====
+// ===== ARQUIVO DO POKER - VERSÃO COM PLANILHA =====
 
 // ------------------------------------------------------
-// BASE DE DADOS - JOGADORES
+// URL DA SUA PLANILHA PUBLICADA (COLE AQUI!)
+// ------------------------------------------------------
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pub?gid=0&single=true&output=csv';
+
+// ------------------------------------------------------
+// BASE DE DADOS - JOGADORES (MANTÉM FIXO POR ENQUANTO)
 // ------------------------------------------------------
 const jogadores = {
     1: "João", 2: "Maria", 3: "Carlos", 4: "Saulo", 5: "Fran",
@@ -26,36 +31,69 @@ const jogadores = {
 };
 
 // ------------------------------------------------------
-// BASE DE DADOS - EVENTOS
+// FUNÇÃO PARA BUSCAR DADOS DA PLANILHA
 // ------------------------------------------------------
-const eventos = [
-    { data: "2025-02-27", torneio: "Super Segunda", local: "São Paulo", campeaoId: 40 },
-    { data: "2025-01-09", torneio: "Super", local: "São Paulo", campeaoId: 5 },
-    { data: "2025-01-06", torneio: "Super Segunda", local: "São Paulo", campeaoId: 1 },
-    { data: "2025-01-03", torneio: "Super Sexta", local: "São Paulo", campeaoId: 11 },
-    { data: "2025-01-02", torneio: "Super Quinta", local: "São Paulo", campeaoId: 1 },
-    { data: "2025-01-01", torneio: "Super Quarta", local: "São Paulo", campeaoId: 44 },
-    { data: "2024-12-13", torneio: "Desafio de Domingo", local: "São Paulo", campeaoId: 12 },
-    { data: "2024-12-13", torneio: "Desafio de Sábado", local: "São Paulo", campeaoId: 12 },
-    { data: "2024-12-13", torneio: "Desafio de Terça", local: "São Paulo", campeaoId: 21 },
-    { data: "2024-12-12", torneio: "Super Sexta", local: "São Paulo", campeaoId: 11 },
-    { data: "2023-05-30", torneio: "Torneio de Maio", local: "São Paulo", campeaoId: 1 },
-    { data: "2023-04-25", torneio: "Torneio de Abril", local: "São Paulo", campeaoId: 10 },
-    { data: "2023-03-10", torneio: "Torneio de Março", local: "São Paulo", campeaoId: 7 },
-    { data: "2023-02-20", torneio: "Torneio de Fevereiro", local: "São Paulo", campeaoId: 4 },
-    { data: "2023-01-15", torneio: "Torneio de Janeiro", local: "São Paulo", campeaoId: 7 }
-];
+async function carregarEventosDaPlanilha() {
+    console.log('📥 Buscando eventos da planilha...');
+    
+    try {
+        const response = await fetch(SHEET_URL);
+        const csv = await response.text();
+        
+        // Parse do CSV
+        const linhas = csv.split('\n');
+        const cabecalho = linhas[0].split(',').map(col => col.replace(/"/g, ''));
+        
+        // Índices das colunas
+        const idxData = cabecalho.findIndex(col => col.includes('data'));
+        const idxTorneio = cabecalho.findIndex(col => col.includes('nome_torneio'));
+        const idxCampeao = cabecalho.findIndex(col => col.includes('id_campeao'));
+        const idxLocal = cabecalho.findIndex(col => col.includes('local_cidade'));
+        
+        const eventos = [];
+        
+        // Pular cabeçalho (i = 1)
+        for (let i = 1; i < linhas.length; i++) {
+            if (!linhas[i].trim()) continue;
+            
+            // Parse simples (melhorar depois)
+            const cols = linhas[i].split(',').map(col => col.replace(/"/g, ''));
+            
+            const evento = {
+                data: cols[idxData] || '',
+                torneio: cols[idxTorneio] || '',
+                campeaoId: parseInt(cols[idxCampeao]) || 0,
+                local: cols[idxLocal] || 'São Paulo'
+            };
+            
+            if (evento.data && evento.torneio) {
+                eventos.push(evento);
+            }
+        }
+        
+        console.log(`✅ ${eventos.length} eventos carregados da planilha!`);
+        return eventos;
+        
+    } catch (error) {
+        console.error('❌ Erro ao carregar planilha:', error);
+        return [];
+    }
+}
 
 // ------------------------------------------------------
 // FUNÇÃO PARA EXIBIR OS EVENTOS
 // ------------------------------------------------------
-function exibirEventos() {
-    console.log("🚀 Função exibirEventos() executada!");
-    console.log("📊 Total de eventos:", eventos.length);
+async function exibirEventos() {
+    console.log("🚀 Buscando dados...");
     
     const timeline = document.getElementById('timeline');
-    if (!timeline) {
-        console.error("❌ Elemento #timeline não encontrado!");
+    timeline.innerHTML = '<div class="loading">📊 Carregando eventos da planilha...</div>';
+    
+    // Carregar da planilha
+    const eventos = await carregarEventosDaPlanilha();
+    
+    if (eventos.length === 0) {
+        timeline.innerHTML = '<div class="loading" style="color: #c00;">⚠️ Nenhum evento encontrado. Verifique a planilha.</div>';
         return;
     }
     
@@ -89,10 +127,10 @@ function exibirEventos() {
         `;
     });
     
-    console.log("✅ Eventos exibidos com sucesso!");
+    console.log(`✅ Site atualizado com ${eventos.length} eventos da planilha!`);
 }
 
 // ------------------------------------------------------
-// EXECUTAR QUANDO A PÁGINA CARREGAR
+// INICIAR TUDO
 // ------------------------------------------------------
-document.addEventListener('DOMContentLoaded', exibirEventos);
+exibirEventos();
