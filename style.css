@@ -1,4 +1,5 @@
-/* ===== ARQUIVO DO POKER - ESTILO GLOBAL ===== */
+/* ===== ARQUIVO DO POKER - CSS LIMPO E FUNCIONAL ===== */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +7,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: #ffffff;
     color: #1a1a1a;
     line-height: 1.6;
@@ -19,7 +20,7 @@ body {
     padding: 20px;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 header {
     border-bottom: 2px solid #0a2463;
     padding-bottom: 20px;
@@ -39,25 +40,40 @@ h1 {
     margin-top: 5px;
 }
 
-/* ===== TIMELINE DE EVENTOS ===== */
+/* TIMELINE - FORÇADAMENTE VISÍVEL */
+#timeline {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 400px;
+    width: 100%;
+}
+
+/* EVENTOS - FORÇADAMENTE VISÍVEIS */
 .evento {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     border-bottom: 1px solid #eaeaea;
     padding: 20px 0;
-    transition: background 0.2s;
+    margin: 0;
 }
 
 .evento:hover {
     background-color: #f9f9f9;
 }
 
+/* DATA */
 .data {
     color: #0a2463;
     font-weight: 600;
     font-size: 0.9em;
     text-transform: uppercase;
     letter-spacing: 1px;
+    margin-bottom: 5px;
 }
 
+/* TÍTULO DO EVENTO */
 .titulo-evento {
     font-size: 1.3em;
     font-weight: 600;
@@ -65,6 +81,7 @@ h1 {
     color: #000;
 }
 
+/* JOGADOR */
 .jogador {
     font-size: 1.1em;
     color: #0a2463;
@@ -72,6 +89,7 @@ h1 {
     margin-bottom: 8px;
 }
 
+/* TIME */
 .time {
     display: inline-block;
     background-color: #f0f0f0;
@@ -82,28 +100,31 @@ h1 {
     margin-left: 8px;
 }
 
+/* DETALHES */
 .detalhes {
     color: #555;
     font-size: 0.95em;
 }
 
-/* ===== ANO ===== */
+/* DIVISOR DE ANO */
 .ano-divisor {
     margin: 30px 0 15px 0;
     color: #0a2463;
     border-bottom: 1px solid #0a2463;
     padding-bottom: 5px;
     font-size: 1.5em;
+    font-weight: 600;
 }
 
-/* ===== LOADING ===== */
+/* LOADING - ESCONDIDO QUANDO OS EVENTOS APARECEM */
 .loading {
     text-align: center;
     padding: 40px;
     color: #666;
+    display: block;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 footer {
     margin-top: 50px;
     padding-top: 20px;
@@ -113,16 +134,7 @@ footer {
     font-size: 0.9em;
 }
 
-footer a {
-    color: #0a2463;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-/* ===== RESPONSIVO ===== */
+/* RESPONSIVO */
 @media (max-width: 600px) {
     .container {
         padding: 10px;
@@ -133,24 +145,4 @@ footer a:hover {
     .titulo-evento {
         font-size: 1.1em;
     }
-}
-
-/* ===== FORÇAR VISIBILIDADE DOS EVENTOS ===== */
-#timeline {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    min-height: 200px;
-}
-
-.evento {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    border-bottom: 1px solid #eaeaea !important;
-    padding: 20px 0 !important;
-}
-
-.loading {
-    display: none !important;
 }
