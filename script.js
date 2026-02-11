@@ -84,6 +84,8 @@ async function carregarEventosDaPlanilha() {
 // FUNÇÃO PARA EXIBIR OS EVENTOS
 // ------------------------------------------------------
 async function exibirEventos() {
+    // 🔥 GARANTIA: limpa o HTML antes de começar
+    document.getElementById('timeline').innerHTML = '<div class="loading">📊 Carregando eventos da planilha...</div>';
     console.log("🚀 Buscando dados...");
     
     const timeline = document.getElementById('timeline');
