@@ -82,7 +82,7 @@ async function carregarEventosDaPlanilha() {
                     premio: dados[7] || '',
                     local_cidade: dados[8] || 'São Paulo',
                     local_pais: dados[9] || 'Brasil',
-                    id_campeao: parseInt(dados[10]) || 0,
+                    id_campeao: parseInt(dados[8]) || 0,
                     id_time: parseInt(dados[11]) || 1,
                     id_patrocinador: dados[12] || ''
                 };
