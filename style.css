@@ -1,0 +1,154 @@
+/* ===== ARQUIVO DO POKER - LAYOUT LINHA/EMAIL ===== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #f5f7fa;
+    color: #1a1a1a;
+    line-height: 1.4;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 20px;
+}
+
+/* HEADER */
+header {
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #0a2463;
+}
+
+h1 {
+    font-size: 1.8em;
+    color: #0a2463;
+}
+
+.subtitulo {
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* TIMELINE - FEED */
+#timeline {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* EVENTO - ESTILO LINHA/EMAIL */
+.evento {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eaeaea;
+    gap: 16px;
+    transition: background 0.2s;
+}
+
+.evento:hover {
+    background-color: #f8fbff;
+}
+
+/* DATA */
+.data {
+    color: #666;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+/* TÍTULO DO EVENTO */
+.titulo-evento {
+    font-weight: 600;
+    color: #0a2463;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* JOGADOR */
+.jogador {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* TIME - badge compacto */
+.time {
+    background-color: #eef2f7;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    color: #4a5568;
+}
+
+/* DETALHES (LOCAL) */
+.detalhes {
+    color: #718096;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+/* DIVISOR DE ANO - mais compacto */
+.ano-divisor {
+    grid-column: 1 / -1;
+    background: #f1f5f9;
+    padding: 6px 16px;
+    margin: 4px 0;
+    color: #0a2463;
+    font-weight: 600;
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+
+/* LOADING */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* FOOTER */
+footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eaeaea;
+    text-align: center;
+    color: #888;
+    font-size: 0.85em;
+}
+
+/* RESPONSIVO - MOBILE */
+@media (max-width: 600px) {
+    .container {
+        padding: 12px;
+    }
+    
+    .evento {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 16px 12px;
+    }
+    
+    .data {
+        color: #0a2463;
+        font-size: 0.8em;
+    }
+    
+    .jogador {
+        flex-wrap: wrap;
+    }
+}
