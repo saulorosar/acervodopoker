@@ -1,13 +1,9 @@
-// ===== ARQUIVO DO POKER - LEITOR DE PLANILHA HTML =====
+// ===== ARQUIVO DO POKER - VERSÃO CSV CONFIRMADA =====
 
-// ------------------------------------------------------
-// URL DA SUA PLANILHA PUBLICADA (ABA EVENTOS)
-// ------------------------------------------------------
-const PLANILHA_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pubhtml?gid=0&single=true';
+// URL do CSV (QUE JÁ ESTÁ FUNCIONANDO!)
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pub?gid=0&single=true&output=csv';
 
-// ------------------------------------------------------
-// BASE DE DADOS - JOGADORES (FIXA POR ENQUANTO)
-// ------------------------------------------------------
+// BASE DE JOGADORES
 const jogadores = {
     1: "João", 2: "Maria", 3: "Carlos", 4: "Saulo", 5: "Fran",
     6: "Cleber", 7: "Vanessa", 8: "Marcos", 9: "Helio",
@@ -30,104 +26,64 @@ const jogadores = {
     58: "Reiner Weihermann", 59: "Mauro Santos"
 };
 
-// ------------------------------------------------------
-// FUNÇÃO PARA BUSCAR E EXTRAIR DADOS DA PLANILHA HTML
-// ------------------------------------------------------
-async function carregarEventosDaPlanilha() {
-    console.log('📥 Acessando planilha publicada...');
-    
+// FUNÇÃO PARA BUSCAR CSV
+async function carregarEventos() {
     try {
-        // 1. Buscar o HTML da planilha
-        const response = await fetch(PLANILHA_URL);
-        const html = await response.text();
+        console.log('📥 Baixando CSV...');
+        const response = await fetch(CSV_URL);
+        const csv = await response.text();
         
-        console.log('📄 HTML carregado, processando tabela...');
-        
-        // 2. Encontrar a tabela de dados
-        const tabelaMatch = html.match(/<table[^>]*>([\s\S]*?)<\/table>/i);
-        if (!tabelaMatch) {
-            throw new Error('Tabela não encontrada no HTML');
-        }
-        
-        const tabela = tabelaMatch[1];
-        
-        // 3. Extrair linhas da tabela
-        const linhas = tabela.split(/<\/tr>/i);
+        // Divide em linhas
+        const linhas = csv.split('\n');
         const eventos = [];
         
-        // Pular cabeçalho (primeira linha)
+        // Pula cabeçalho (linha 1)
         for (let i = 1; i < linhas.length; i++) {
-            const linha = linhas[i];
-            if (!linha.includes('<td')) continue;
+            if (!linhas[i].trim()) continue;
             
-            // Extrair células
-            const celulas = linha.split(/<td[^>]*>/i);
+            // Divide as colunas
+            const cols = linhas[i].split(',').map(col => col.replace(/"/g, '').trim());
             
-            // Limpar tags HTML e obter texto puro
-            const dados = celulas.map(celula => {
-                const texto = celula.replace(/<[^>]+>/g, '').trim();
-                return texto.replace(/\s+/g, ' '); // Remove espaços extras
-            });
+            // ÍNDICES CORRETOS baseados no seu cabeçalho:
+            // 0:id_evento, 1:data, 2:nome_torneio, 3:serie, 4:buyin, 5:participantes,
+            // 6:premio_primeiro, 7:local_cidade, 8:id_campeao, 9:id_time, 10:id_patrocinador, etc...
             
-            // Acessar colunas específicas (baseado na ordem do seu cabeçalho)
-            // Índices ajustados após split do <td>
-            if (dados.length >= 11) {
-                const evento = {
-                    id: dados[1] || '',
-                    data: dados[2] || '',
-                    nome_torneio: dados[3] || '',
-                    serie: dados[4] || '',
-                    buyin: dados[5] || '',
-                    participantes: dados[6] || '',
-                    premio: dados[7] || '',
-                    local_cidade: dados[8] || 'São Paulo',
-                    local_pais: dados[9] || 'Brasil',
-                    id_campeao: parseInt(dados[8]) || 0,
-                    id_time: parseInt(dados[11]) || 1,
-                    id_patrocinador: dados[12] || ''
-                };
-                
-                // Só adicionar se tiver data e nome do torneio
-                if (evento.data && evento.nome_torneio) {
-                    eventos.push(evento);
-                }
+            const evento = {
+                data: cols[1] || '',
+                torneio: cols[2] || '',
+                local: cols[7] || 'São Paulo',
+                campeaoId: parseInt(cols[8]) || 0  // ✅ ÍNDICE 8 = id_campeao!
+            };
+            
+            if (evento.data && evento.torneio) {
+                eventos.push(evento);
             }
         }
         
-        console.log(`✅ ${eventos.length} eventos extraídos da planilha!`);
+        console.log(`✅ ${eventos.length} eventos carregados!`);
         return eventos;
         
     } catch (error) {
-        console.error('❌ Erro ao carregar planilha:', error);
+        console.error('❌ Erro:', error);
         return [];
     }
 }
 
-// ------------------------------------------------------
-// FUNÇÃO PARA EXIBIR OS EVENTOS NO SITE
-// ------------------------------------------------------
+// FUNÇÃO PARA EXIBIR
 async function exibirEventos() {
     const timeline = document.getElementById('timeline');
-    if (!timeline) {
-        console.error('❌ Elemento #timeline não encontrado!');
-        return;
-    }
+    if (!timeline) return;
     
-    timeline.innerHTML = '<div class="loading">📊 Carregando acervo histórico...</div>';
+    timeline.innerHTML = '<div class="loading">📊 Carregando acervo...</div>';
     
-    const eventos = await carregarEventosDaPlanilha();
+    const eventos = await carregarEventos();
     
     if (eventos.length === 0) {
-        timeline.innerHTML = `
-            <div class="loading" style="color: #666; text-align: left;">
-                ⚠️ Nenhum evento encontrado na planilha.<br>
-                <small>Verifique se a aba "eventos" está publicada e contém dados.</small>
-            </div>
-        `;
+        timeline.innerHTML = '<div class="loading">⚠️ Nenhum evento encontrado</div>';
         return;
     }
     
-    // Ordenar do mais recente para o mais antigo
+    // Ordenar
     eventos.sort((a, b) => b.data.localeCompare(a.data));
     
     timeline.innerHTML = '';
@@ -138,47 +94,29 @@ async function exibirEventos() {
         
         if (ano !== anoAtual) {
             anoAtual = ano;
-            timeline.innerHTML += `<h2 class="ano-divisor">🏆 ${ano}</h2>`;
+            timeline.innerHTML += `<h2 class="ano-divisor">${ano}</h2>`;
         }
         
         // Formatar data
         const dataObj = new Date(evento.data + 'T12:00:00');
-        const dataFormatada = dataObj.toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
+        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
         
         // Nome do jogador
-        const nomeJogador = jogadores[evento.id_campeao] || `Jogador #${evento.id_campeao}`;
-        
-        // Nome do torneio
-        const titulo = evento.nome_torneio || evento.serie || 'Torneio';
+        const nomeJogador = jogadores[evento.campeaoId] || `Jogador #${evento.campeaoId}`;
         
         timeline.innerHTML += `
             <div class="evento">
                 <div class="data">${dataFormatada}</div>
-                <div class="titulo-evento">${titulo}</div>
+                <div class="titulo-evento">${evento.torneio}</div>
                 <div class="jogador">
                     🏆 ${nomeJogador}
                     <span class="time">Vip Poker Club</span>
                 </div>
-                <div class="detalhes">
-                    📍 ${evento.local_cidade || 'São Paulo'}, ${evento.local_pais || 'Brasil'}
-                    ${evento.premio ? ` • 💰 R$ ${parseInt(evento.premio).toLocaleString('pt-BR')}` : ''}
-                </div>
+                <div class="detalhes">📍 ${evento.local}</div>
             </div>
         `;
     });
-    
-    console.log(`🎉 Site atualizado com ${eventos.length} eventos!`);
 }
 
-// ------------------------------------------------------
-// INICIAR QUANDO A PÁGINA CARREGAR
-// ------------------------------------------------------
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', exibirEventos);
-} else {
-    exibirEventos();
-}
+// INICIAR
+exibirEventos();
