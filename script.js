@@ -1,7 +1,7 @@
 // ===== ARQUIVO DO POKER - VERSÃO CSV CONFIRMADA =====
 
 // URL do CSV (QUE JÁ ESTÁ FUNCIONANDO!)
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pub?gid=0&single=true&output=csv';
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pubhtml?gid=0&single=true';
 
 // BASE DE JOGADORES
 const jogadores = {
