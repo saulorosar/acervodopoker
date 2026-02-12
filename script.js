@@ -2,25 +2,25 @@
 const API_URL = 'https://api.sheetbest.com/sheets/95640710-3b5b-4842-9423-fbf6ff3346f0';
 
 const jogadores = {
-    1: "João", 2: "Maria", 3: "Carlos", 4: "Saulo", 5: "Fran",
-    6: "Cleber", 7: "Vanessa", 8: "Marcos", 9: "Helio",
-    10: "José Belarmino (Sr. Zé)", 11: "Carlos Augusto", 12: "Dr. Geraldo Garcia",
-    13: "Adriano Lindner", 14: "Marcos H. (Santista)", 15: "Mauricio Diaz",
-    16: "Dennis Reserva", 17: "Ailton Alves", 18: "Jonathan Santos",
-    19: "Rogério Gold", 20: "Sergio Scopel", 21: "Alcir Notari",
-    22: "Anderson Moraes", 23: "João Junior", 24: "Alessandre Iba",
-    25: "Anderson Barros", 26: "Luiz H. (Henrique Brito)", 27: "Leniton Bronze",
-    28: "Cristian Rico", 29: "Leonardo Cruz", 30: "Luiz Ezequiel (Zico)",
-    31: "Claudio Molina", 32: "Rodrigo Pressoto", 33: "Paulo Roberto",
-    34: "Atair Pissaia", 35: "Marion Susin", 36: "Paulo Cesar Kauer",
-    37: "Leonardo Scalabrin", 38: "Vilson Rodrigues", 39: "Sergio Monteiro",
-    40: "Hamilton Junior", 41: "Mayckon Cardoso", 42: "Arthur Oliveira",
-    43: "José Macedo", 44: "João Carlos Grando", 45: "Juliano Ortiz",
-    46: "Adilson Just", 47: "Marcello Fernandes", 48: "Geanfrancesco Pereira",
-    49: "Djeik Williams", 50: "Ricardo Piva", 51: "Celio Reis",
-    52: "Aura de Melo", 53: "Luciano Pancich", 54: "Alcenor Mocelin",
-    55: "Diego Nardini", 56: "Artur Rocha", 57: "Alex Gaspar",
-    58: "Reiner Weihermann", 59: "Mauro Santos"
+     1: "Pedro", 2: "Ana", 3: "Lucas", 4: "Rafael", 5: "G",
+ 6: "Bruno", 7: "Camila", 8: "Thiago", 9: "Fernando",
+ 10: "Antônio Silva (Sr. Toninho)", 11: "Felipe Augusto", 12: "Dr. Henrique Almeida",
+ 13: "Eduardo Martins", 14: "Ricardo L. (Carioca)", 15: "Gustavo Mendes",
+ 16: "Daniel Costa", 17: "Roberto Lima", 18: "Matheus Oliveira",
+ 19: "Fábio Goldmann", 20: "Marcelo Souza", 21: "Cláudio Ferreira",
+ 22: "André Moraes", 23: "Paulo Junior", 24: "Alexandre Batista",
+ 25: "Renato Barros", 26: "Luiz Felipe (Felipinho)", 27: "Henrique Prado",
+ 28: "Cristiano Duarte", 29: "Leonardo Farias", 30: "Luiz Gustavo (Guga)",
+ 31: "Claudio Ribeiro", 32: "Rodrigo Almeida", 33: "Paulo Henrique",
+ 34: "Althair Costa", 35: "Mariana Souza", 36: "Paulo Cesar Andrade",
+ 37: "Leonardo Teixeira", 38: "Wilson Rodrigues", 39: "Sergio Carvalho",
+ 40: "Hugo Nascimento", 41: "Maicon Cardoso", 42: "Arthur Mendes",
+ 43: "José Ricardo", 44: "João Pedro Almeida", 45: "Juliano Castro",
+ 46: "Adriano Justino", 47: "Marcelo Fernandes", 48: "Giovanni Pereira",
+ 49: "Derek Williams", 50: "Ricardo Antunes", 51: "Célio Martins",
+ 52: "Laura de Melo", 53: "Luciano Pacheco", 54: "Alcides Moreira",
+ 55: "Diego Fernandes", 56: "Artur Lopes", 57: "Alexandre Gaspar",
+ 58: "Reinaldo Weber", 59: "Maurício Santos"
 };
 
 async function carregarEventos() {
