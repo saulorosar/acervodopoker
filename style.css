@@ -1,4 +1,4 @@
-/* ===== ARQUIVO DO POKER - LAYOUT LINHA/EMAIL ===== */
+/* ===== ARQUIVO DO POKER - TUDO EM UMA LINHA ===== */
 
 * {
     margin: 0;
@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     background: white;
     border-radius: 12px;
@@ -40,21 +40,20 @@ h1 {
     font-size: 0.95em;
 }
 
-/* TIMELINE - FEED */
+/* TIMELINE */
 #timeline {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-/* EVENTO - ESTILO LINHA/EMAIL */
+/* EVENTO - TUDO EM UMA LINHA! */
 .evento {
-    display: grid;
-    grid-template-columns: 100px 1fr auto;
+    display: flex;
     align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid #eaeaea;
     gap: 16px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eaeaea;
     transition: background 0.2s;
 }
 
@@ -62,31 +61,35 @@ h1 {
     background-color: #f8fbff;
 }
 
-/* DATA */
+/* DATA - FIXA */
 .data {
     color: #666;
     font-size: 0.85em;
+    min-width: 80px;
     white-space: nowrap;
 }
 
-/* TÍTULO DO EVENTO */
+/* TÍTULO - FLEXÍVEL */
 .titulo-evento {
     font-weight: 600;
     color: #0a2463;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex: 1; /* OCUPA O ESPAÇO DISPONÍVEL */
 }
 
-/* JOGADOR */
+/* JOGADOR + TIME + LOCAL - TODOS JUNTOS */
 .jogador {
     display: flex;
     align-items: center;
     gap: 8px;
     white-space: nowrap;
+    color: #0a2463;
+    font-weight: 500;
 }
 
-/* TIME - badge compacto */
+/* TIME */
 .time {
     background-color: #eef2f7;
     padding: 2px 8px;
@@ -95,16 +98,23 @@ h1 {
     color: #4a5568;
 }
 
-/* DETALHES (LOCAL) */
+/* LOCAL - AGORA NA MESMA LINHA! */
 .detalhes {
+    display: inline;
     color: #718096;
     font-size: 0.85em;
     white-space: nowrap;
+    margin-left: 4px;
 }
 
-/* DIVISOR DE ANO - mais compacto */
+.detalhes::before {
+    content: "•";
+    margin-right: 6px;
+    color: #cbd5e0;
+}
+
+/* DIVISOR DE ANO */
 .ano-divisor {
-    grid-column: 1 / -1;
     background: #f1f5f9;
     padding: 6px 16px;
     margin: 4px 0;
@@ -132,23 +142,20 @@ footer {
 }
 
 /* RESPONSIVO - MOBILE */
-@media (max-width: 600px) {
-    .container {
-        padding: 12px;
-    }
-    
+@media (max-width: 700px) {
     .evento {
-        grid-template-columns: 1fr;
-        gap: 6px;
-        padding: 16px 12px;
+        flex-wrap: wrap;
+        gap: 8px;
     }
     
     .data {
-        color: #0a2463;
-        font-size: 0.8em;
+        min-width: auto;
     }
     
-    .jogador {
-        flex-wrap: wrap;
+    .titulo-evento {
+        white-space: normal;
+        flex: 0 0 100%;
+        order: -1;
+        margin-bottom: 4px;
     }
 }
