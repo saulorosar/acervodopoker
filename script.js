@@ -1,9 +1,9 @@
-// ===== ARQUIVO DO POKER - VERSÃO CSV CONFIRMADA =====
+// ===== ARQUIVO DO POKER - VERSÃO SHEET.BEST (CORRIGIDA) =====
 
-// URL do CSV (QUE JÁ ESTÁ FUNCIONANDO!)
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vThbX0i_1Ph_1b0QqDxUPZg4E2QDG2ulw6sRzQJqmqyVnHaAUdu_LCilhs3go5rS_jwLYJ9sr5IGUSK/pubhtml?gid=0&single=true';
+// ✅ URL DA SUA API SHEET.BEST (JÁ FUNCIONANDO!)
+const API_URL = 'https://api.sheetbest.com/sheets/95640710-3b5b-4842-9423-fbf6ff3346f0';
 
-// BASE DE JOGADORES
+// ✅ BASE DE JOGADORES (COMPLETA)
 const jogadores = {
     1: "João", 2: "Maria", 3: "Carlos", 4: "Saulo", 5: "Fran",
     6: "Cleber", 7: "Vanessa", 8: "Marcos", 9: "Helio",
@@ -26,55 +26,41 @@ const jogadores = {
     58: "Reiner Weihermann", 59: "Mauro Santos"
 };
 
-// FUNÇÃO PARA BUSCAR CSV
+// ✅ FUNÇÃO PARA BUSCAR DADOS DA API
 async function carregarEventos() {
     try {
-        console.log('📥 Baixando CSV...');
-        const response = await fetch(CSV_URL);
-        const csv = await response.text();
+        console.log('📥 Buscando dados do Sheet.best...');
+        const response = await fetch(API_URL);
         
-        // Divide em linhas
-        const linhas = csv.split('\n');
-        const eventos = [];
-        
-        // Pula cabeçalho (linha 1)
-        for (let i = 1; i < linhas.length; i++) {
-            if (!linhas[i].trim()) continue;
-            
-            // Divide as colunas
-            const cols = linhas[i].split(',').map(col => col.replace(/"/g, '').trim());
-            
-            // ÍNDICES CORRETOS baseados no seu cabeçalho:
-            // 0:id_evento, 1:data, 2:nome_torneio, 3:serie, 4:buyin, 5:participantes,
-            // 6:premio_primeiro, 7:local_cidade, 8:id_campeao, 9:id_time, 10:id_patrocinador, etc...
-            
-            const evento = {
-                data: cols[1] || '',
-                torneio: cols[2] || '',
-                local: cols[7] || 'São Paulo',
-                campeaoId: parseInt(cols[8]) || 0  // ✅ ÍNDICE 8 = id_campeao!
-            };
-            
-            if (evento.data && evento.torneio) {
-                eventos.push(evento);
-            }
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
         }
         
-        console.log(`✅ ${eventos.length} eventos carregados!`);
+        const dados = await response.json();
+        console.log(`✅ ${dados.length} eventos carregados!`, dados);
+        
+        // Converter para o formato do seu sistema
+        const eventos = dados.map(item => ({
+            data: item.data || '',
+            torneio: item.nome_torneio || '',
+            local: item.local_cidade || 'São Paulo',
+            campeaoId: parseInt(item.id_time) || 0  // ⚠️ IMPORTANTE: aqui é id_time, NÃO id_campeao!
+        }));
+        
         return eventos;
         
     } catch (error) {
-        console.error('❌ Erro:', error);
+        console.error('❌ Erro ao carregar:', error);
         return [];
     }
 }
 
-// FUNÇÃO PARA EXIBIR
+// ✅ FUNÇÃO PARA EXIBIR OS EVENTOS
 async function exibirEventos() {
     const timeline = document.getElementById('timeline');
     if (!timeline) return;
     
-    timeline.innerHTML = '<div class="loading">📊 Carregando acervo...</div>';
+    timeline.innerHTML = '<div class="loading">📊 Carregando acervo histórico...</div>';
     
     const eventos = await carregarEventos();
     
@@ -83,7 +69,7 @@ async function exibirEventos() {
         return;
     }
     
-    // Ordenar
+    // Ordenar do mais recente para o mais antigo
     eventos.sort((a, b) => b.data.localeCompare(a.data));
     
     timeline.innerHTML = '';
@@ -94,14 +80,16 @@ async function exibirEventos() {
         
         if (ano !== anoAtual) {
             anoAtual = ano;
-            timeline.innerHTML += `<h2 class="ano-divisor">${ano}</h2>`;
+            timeline.innerHTML += `<h2 class="ano-divisor">📅 ${ano}</h2>`;
         }
         
         // Formatar data
         const dataObj = new Date(evento.data + 'T12:00:00');
-        const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+        const dataFormatada = dataObj.toLocaleDateString('pt-BR', {
+            timeZone: 'UTC'
+        });
         
-        // Nome do jogador
+        // Nome do jogador (ATENÇÃO: usa id_time, NÃO campeaoId!)
         const nomeJogador = jogadores[evento.campeaoId] || `Jogador #${evento.campeaoId}`;
         
         timeline.innerHTML += `
@@ -118,5 +106,5 @@ async function exibirEventos() {
     });
 }
 
-// INICIAR
+// ✅ INICIAR QUANDO A PÁGINA CARREGAR
 exibirEventos();
